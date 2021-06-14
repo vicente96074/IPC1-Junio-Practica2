@@ -16,6 +16,14 @@ public class IPC1JunioPractica2{
 	private void iniciarInformacionDePeliculas(){
 		idCliente[0] = 12345;
 		nombreCliente[0] = "Augusto";
+		telefonoCliente[0] = 44448888;
+		tienePeliculaPrestado[0] = false;
+		
+		idCliente[1] = 23456;
+		nombreCliente[1] = "Vicente";
+		telefonoCliente[1] = 22224141;
+		tienePeliculaPrestado[1] = false;
+		
 		idCliente[1] = 23456;
 		nombreCliente[1] = "Vicente";
 		//id de las peliculas
@@ -379,8 +387,14 @@ public class IPC1JunioPractica2{
 	
 	//Funcion para mostrar clientes
 	private void mostrarClientes(){
-		
-		
+		System.out.println("\n\n                          Clientes                              "
+				  +"\nNombre        Id      Telefono        Pelicula Prestado");
+		for(int i=0; i<nClientes; i++){
+			System.out.printf("\n%s     %d     %d              %b", nombreCliente[i], idCliente[i], 
+			telefonoCliente[i], tienePeliculaPrestado[i]);
+		}
+		System.out.println("");
+
 	}
 	
 	//Funcion para Reportes	
@@ -397,7 +411,7 @@ public class IPC1JunioPractica2{
 	//Variables y el scanner
 	Scanner entrada = new Scanner(System.in);
 	int nPeliculas = 5;
-	int nClientes = 1;
+	int nClientes = 2;
 	
 	//Arreglos para los clientes
 	String[] nombreCliente = new String[20];
