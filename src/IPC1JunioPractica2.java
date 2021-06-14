@@ -9,12 +9,15 @@ public class IPC1JunioPractica2{
 	
 	private void iniciarComponentes(){
 		iniciarInformacionDePeliculas();
-		System.out.println("     Memorabilia     ");
+		System.out.println("      Memorabilia       ");
 		menu();
 	}
 	
 	private void iniciarInformacionDePeliculas(){
 		idCliente[0] = 12345;
+		nombreCliente[0] = "Augusto";
+		idCliente[1] = 23456;
+		nombreCliente[1] = "Vicente";
 		//id de las peliculas
 		idPelicula[0] = 4;
 		idPelicula[1] = 3;
@@ -203,24 +206,25 @@ public class IPC1JunioPractica2{
 					}while(continuar == false);
 					
 					//Hacemos los cambios a los estados del cliente y la pelicula
+
 					tienePeliculaPrestado[posCliente] = true;
 					disponiblePelicula[posPelicula] = false;
-					idClientePrestador[peliculasPrestados-1] = idCliente[posCliente];
-					idPeliculaPrestado[peliculasPrestados-1] = idPelicula[posPelicula];
-					
+					idClientePrestador[peliculasPrestados/*-1*/] = idCliente[posCliente];
+					idPeliculaPrestado[peliculasPrestados/*-1*/] = idPelicula[posPelicula];
+					peliculasPrestados++;					
 					//Agregamos los días que se presta una pelicula
 					switch(dia){
 						case 1:
-							diaPrestadoPelicula[peliculasPrestados-1] = 1;
+							diaPrestadoPelicula[peliculasPrestados /*-1*/] = 1;
 							break;
 						case 2:
-							diaPrestadoPelicula[peliculasPrestados-1] = 5;
+							diaPrestadoPelicula[peliculasPrestados  /*-1*/] = 5;
 							break;
 						case 3:
-							diaPrestadoPelicula[peliculasPrestados-1] = 10;
+							diaPrestadoPelicula[peliculasPrestados /*-1*/] = 10;
 							break;
 						case 4:
-							diaPrestadoPelicula[peliculasPrestados-1] = 30;
+							diaPrestadoPelicula[peliculasPrestados /*-1*/] = 30;
 							break;
 					}
 					System.out.println("\n¡Pelicula prestado exitosamente!");
@@ -236,14 +240,114 @@ public class IPC1JunioPractica2{
 	
 	//Funcion para devolver las peliculas
 	private void devoluciónDePeliculas(){
+		int posPelicula = 0;
+		int posCliente = 0;
+		boolean encontrado = false;
+		int idP = 0;
+		int posIdPelicula = 0;
+		int auxiliarIdPelicula = 0;
+		int auxiliarIdCliente = 0;
+		int auxiliarDiaPrestado = 0;
+		//Mostrar a todas las peliculas prestadas
+		if(peliculasPrestados>0){
+			System.out.println("\nPeliculas prestados");
+			for(int i=0; i<peliculasPrestados; i++){
+				for(int j=0; j<idPelicula.length; j++){
+					//Buscar en que posicion se encuentra la pelicula
+					if(idPeliculaPrestado[i] == idPelicula[j]){
+						posPelicula = j;
+						break;
+					}
+				}
+				
+				for(int j=0; j<idPelicula.length; j++){
+					//Buscar en que posicion se encuentra el cliente
+					if(idClientePrestador[i] == idCliente[j]){
+						posCliente = j;
+						break;
+					}
+				}
+				
+				System.out.println("ǀId pelicula: " + idPeliculaPrestado[i] + "ǀ nombre de la pelicula: "
+						  + nombrePelicula[posPelicula] + "ǀ Id del cliente: "+idClientePrestador[i]
+						  + "ǀ nombre del cliente: " + nombreCliente[posCliente] + " ǀ");
+			}
+			
+			do{
+				System.out.print("\nIngrese el id de la pelicula a devolver: ");
+				idP = entrada.nextInt();
+				
+				//Comprobar que el id de la pelicula esta en la tabla de prestamos
+				for(int i=0; i<peliculasPrestados; i++){
+					if(idP == idPeliculaPrestado[i] ){
+						posIdPelicula = i;
+						auxiliarIdPelicula = idP;
+						auxiliarIdCliente = idClientePrestador[i];
+						auxiliarDiaPrestado = diaPrestadoPelicula[i];
+						encontrado = true;
+						break;
+					}
+				}
+				
+				if(encontrado == false){
+					System.out.println("Id no encontrada, vuelva a ingresar");
+				}
+				
+			}while(encontrado == false);
+			
+			if(encontrado){
+				elimiarPelicula(posIdPelicula, auxiliarIdPelicula, auxiliarIdCliente, auxiliarDiaPrestado);
+			}
+			
+		} else {
+			System.out.println("\n¡No hay peliculas prestados aún!");
+		}
 		
+	}
+	
+	//Funcion para remover una pelicula de tabla de prestamos
+	private void elimiarPelicula(int posIdPelicula, int auxiliarIdPelicula, int auxiliarIdCliente, int auxiliarDiaPrestado){
+		System.out.println("\n¡Devolviendo la pelicula!");
+			
+			//Buscar donde se encuentra el id de la pelicula y regresdarlo a peliculas disponibles
+			for(int i=0; i<idPelicula.length; i++){
+				if(idPeliculaPrestado[posIdPelicula] == idPelicula[i]){
+					disponiblePelicula[i] = true;
+					break;
+				}
+			}
+			
+			for(int i=0; i<peliculasPrestados; i++){
+				if(i>=posIdPelicula){
+					//Remover una casilla de la tabla de prestamos
+					idPeliculaPrestado[i] = idPeliculaPrestado[i+1];
+					idClientePrestador[i] = idClientePrestador[i+1];
+					diaPrestadoPelicula[i] = diaPrestadoPelicula[i+1];
+					if(i == peliculasPrestados-1){
+						
+						//Mover el id del cliente y la pelicula hasta el final y luego ocultarlo
+						idPeliculaPrestado[i] = auxiliarIdPelicula;
+						idClientePrestador[i] = auxiliarIdCliente;
+						diaPrestadoPelicula[i] = auxiliarDiaPrestado;
+						peliculasPrestados--;
+					}
+				}
+			}
+
+			//Liberar al cliente para que pueda prestar una nueva pelicula
+			for(int i = 0; i<idCliente.length; i++){
+				if(idCliente[i] == auxiliarIdCliente){
+					tienePeliculaPrestado[i] = false;
+				}
+			}
+					
 		
 	}
 	
 	//Funcion para mostrar todas las peliculas
 	private void mostrarLasPeliculas(){
 		System.out.println("\nTodas las peliculas");
-			for(int i=0; i<idPelicula.length; i++){
+			for(int i=0; i<nPeliculas; i++){
 				System.out.println("Id: "+idPelicula[i]+" --  nombre: " + nombrePelicula[i] +
 				" --  año: " +añoPelicula[i] + " --  categoria: "+categoriaDeCadaPelicula[i]+
 				" --  disponible: "+ disponiblePelicula[i]);
@@ -264,13 +368,13 @@ public class IPC1JunioPractica2{
 	
 	//Funcion ingresar clientes nuevos
 	private void ingresarClientesNuevos(){
-		/*System.out.println("Ingrese su nombre: ");
+		System.out.println("Ingrese su nombre: ");
 		nombreCliente[nClientes] = entrada.nextLine();
 		System.out.println("Ingrese su id: ");
 		idCliente[nClientes] = entrada.nextInt();
 		System.out.println("Ingrese su telefono: ");
 		telefonoCliente[nClientes] = entrada.nextInt();
-		*/
+		
 	}
 	
 	//Funcion para mostrar clientes
@@ -296,24 +400,23 @@ public class IPC1JunioPractica2{
 	int nClientes = 1;
 	
 	//Arreglos para los clientes
-	String[] nombreCliente = new String[nClientes];
-	int[] idCliente = new int[nClientes];
-	int[] telefonoCliente = new int[nClientes];
-	boolean[] tienePeliculaPrestado = new boolean[nClientes];
+	String[] nombreCliente = new String[20];
+	int[] idCliente = new int[20];
+	int[] telefonoCliente = new int[20];
+	boolean[] tienePeliculaPrestado = new boolean[20];
 	
 	//Arreglos para las peliculas
-	int[] idPelicula = new int[nPeliculas];
-	String[] nombrePelicula = new String[nPeliculas];
-	int[] añoPelicula = new int[nPeliculas];
+	int[] idPelicula = new int[20];
+	String[] nombrePelicula = new String[20];
+	int[] añoPelicula = new int[20];
 	String[] categoriaPeliculas = {"Ciencia ficción", "Fantasia", "Animacion", "Comedia", "Drama"};
-	String[] categoriaDeCadaPelicula = new String[nPeliculas];
-	boolean[] disponiblePelicula = new boolean[nPeliculas];
+	String[] categoriaDeCadaPelicula = new String[20];
+	boolean[] disponiblePelicula = new boolean[20];
 	
 	//Arreglo para los dias  de prestado para cada pelicula
-	int peliculasPrestados = 1;
+	int peliculasPrestados = 0;
 	int[] díasPrestamo = {1,5,15,30};
-	int[] idClientePrestador  = new int[peliculasPrestados];
-	int[] idPeliculaPrestado  = new int[peliculasPrestados];
-	int[] diaPrestadoPelicula = new int[peliculasPrestados];
-	int[] 
+	int[] idClientePrestador  = new int[20];
+	int[] idPeliculaPrestado  = new int[20];
+	int[] diaPrestadoPelicula = new int[20]; 
 }
