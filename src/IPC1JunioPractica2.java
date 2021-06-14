@@ -217,22 +217,23 @@ public class IPC1JunioPractica2{
 
 					tienePeliculaPrestado[posCliente] = true;
 					disponiblePelicula[posPelicula] = false;
-					idClientePrestador[peliculasPrestados/*-1*/] = idCliente[posCliente];
-					idPeliculaPrestado[peliculasPrestados/*-1*/] = idPelicula[posPelicula];
+					idClientePrestador[peliculasPrestados] = idCliente[posCliente];
+					idPeliculaPrestado[peliculasPrestados] = idPelicula[posPelicula];
+					cantidadVecesSePresta[posPelicula]++;
 					peliculasPrestados++;					
 					//Agregamos los días que se presta una pelicula
 					switch(dia){
 						case 1:
-							diaPrestadoPelicula[peliculasPrestados /*-1*/] = 1;
+							diaPrestadoPelicula[peliculasPrestados] = 1;
 							break;
 						case 2:
-							diaPrestadoPelicula[peliculasPrestados  /*-1*/] = 5;
+							diaPrestadoPelicula[peliculasPrestados ] = 5;
 							break;
 						case 3:
-							diaPrestadoPelicula[peliculasPrestados /*-1*/] = 10;
+							diaPrestadoPelicula[peliculasPrestados] = 10;
 							break;
 						case 4:
-							diaPrestadoPelicula[peliculasPrestados /*-1*/] = 30;
+							diaPrestadoPelicula[peliculasPrestados] = 30;
 							break;
 					}
 					System.out.println("\n¡Pelicula prestado exitosamente!");
@@ -356,9 +357,10 @@ public class IPC1JunioPractica2{
 	private void mostrarLasPeliculas(){
 		System.out.println("\nTodas las peliculas");
 			for(int i=0; i<nPeliculas; i++){
-				System.out.println("Id: "+idPelicula[i]+" --  nombre: " + nombrePelicula[i] +
-				" --  año: " +añoPelicula[i] + " --  categoria: "+categoriaDeCadaPelicula[i]+
-				" --  disponible: "+ disponiblePelicula[i]);
+				System.out.println("\nPelicula No. "+(i+1));
+				System.out.print("Id: "+idPelicula[i]+"\nNombre: " + nombrePelicula[i] +
+				"\nAño: " +añoPelicula[i] + "\nCategoria: "+categoriaDeCadaPelicula[i]+
+				"\nDisponible: "+ disponiblePelicula[i]+ "\n");
 			}
 	}
 	
@@ -402,19 +404,19 @@ public class IPC1JunioPractica2{
 						continuar = true;
 						break;
 					case 2:
-						categoriaDeCadaPelicula[nPeliculas] = categoriaPeliculas[0];
+						categoriaDeCadaPelicula[nPeliculas] = categoriaPeliculas[1];
 						continuar = true;
 						break;
 					case 3:
-						categoriaDeCadaPelicula[nPeliculas] = categoriaPeliculas[0];
+						categoriaDeCadaPelicula[nPeliculas] = categoriaPeliculas[2];
 						continuar = true;
 						break;
 					case 4:
-						categoriaDeCadaPelicula[nPeliculas] = categoriaPeliculas[0];
+						categoriaDeCadaPelicula[nPeliculas] = categoriaPeliculas[3];
 						continuar = true;
 						break;
 					case 5:
-						categoriaDeCadaPelicula[nPeliculas] = categoriaPeliculas[0];
+						categoriaDeCadaPelicula[nPeliculas] = categoriaPeliculas[4];
 						continuar = true;
 						break;
 					default:
@@ -469,6 +471,11 @@ public class IPC1JunioPractica2{
         	    boolean auxiliarDisponiblePelicula = disponiblePelicula[i];
         	    disponiblePelicula[i] =disponiblePelicula[min];
         	    disponiblePelicula[min] = auxiliarDisponiblePelicula;
+        	    
+        	    //Cantidad de veces que se presta una pelicula
+        	    int auxCantidadVecesSePresta = cantidadVecesSePresta[i];
+        	    cantidadVecesSePresta[i] = cantidadVecesSePresta[min];
+        	    cantidadVecesSePresta[min] = auxCantidadVecesSePresta;
         	}
         	
 		do{
@@ -549,7 +556,88 @@ public class IPC1JunioPractica2{
 	
 	//Funcion para Reportes	
 	private void reportes(){
+		
+		System.out.println("\n          - Reportes-           ");
+		cantidadPorCategoria();
+		
+		System.out.println("Cantidad de peliculas por categorias.");
+		for(int i=0; i<5; i++){
+			System.out.printf("  %s: %d \n", categoriaPeliculas[i], cantidadPorCategoria[i]);
+		}
+		
+		System.out.println("\nReporte de las películas y la cantidad de veces que se presta.\n");
+		for(int i=0; i<nPeliculas; i++){
+			System.out.printf("Veces prestado %s es: %d\n", nombrePelicula[i], cantidadVecesSePresta[i]);
+		}
+		
+		peliculaMasMenosPrestada();
+	}
+	
+	//Calcular la cantidad de peliculas por categoria
+	private void cantidadPorCategoria(){
+		for(int i=0; i<5; i++){
+			cantidadPorCategoria[i] = 0;
+		}
+		
+		for(int i = 0; i<nPeliculas; i++){
+			//Para que cada vez que llame a reportes vuelva a calcular de cero las categorias
 			
+			if(categoriaPeliculas[0] == categoriaDeCadaPelicula[i]){
+				cantidadPorCategoria[0]++;
+			} else if(categoriaPeliculas[1] == categoriaDeCadaPelicula[i]){
+				cantidadPorCategoria[1]++;
+			} else if(categoriaPeliculas[2] == categoriaDeCadaPelicula[i]){
+				cantidadPorCategoria[2]++;
+			} else if(categoriaPeliculas[3] == categoriaDeCadaPelicula[i]){
+				cantidadPorCategoria[3]++;
+			} else if(categoriaPeliculas[4] == categoriaDeCadaPelicula[i]){
+				cantidadPorCategoria[4]++;
+			}
+		}
+	}
+	
+	private void peliculaMasMenosPrestada(){
+		System.out.println("\nPelicula más prestada y menos prestada.");
+		int mayor = 0;
+		int posMayor = 0;
+		int menor = 0;
+		int posMenor = 0;
+		
+		for(int i=0; i<nPeliculas; i++){
+			
+			if(cantidadVecesSePresta[i] !=0 && menor == 0){
+				menor = cantidadVecesSePresta[i];
+				posMenor = i;
+			}
+			
+			//Encontrar al mayor
+			if(mayor<cantidadVecesSePresta[i]){
+				mayor = cantidadVecesSePresta[i];
+				posMayor = i;
+			}
+			
+			if(cantidadVecesSePresta[i] != 0){
+				//Encontrar al menor
+				if(menor>cantidadVecesSePresta[i]){
+					menor = cantidadVecesSePresta[i];
+					posMenor = i;
+				}
+			}
+		}
+		
+		if(menor>0 && mayor>0){
+			if(menor == mayor){
+				System.out.println("Se ha prestado la misma cantidad a las peliculas.");
+			} else {
+				System.out.printf("\nSe ha prestado más la pelicula %s por la cantidad de: %d ",
+				nombrePelicula[posMayor], mayor);
+				System.out.printf("\nSe ha prestado menos la pelicula %s por la cantidad de: %d \n",
+				nombrePelicula[posMenor], menor);
+			}
+		} else {
+			System.out.println("¡No se ha prestado ni una sola pelicula!");
+		}
+		
 	}
 	
 	//Metodo principal
@@ -575,11 +663,13 @@ public class IPC1JunioPractica2{
 	String[] categoriaPeliculas = {"Ciencia ficción", "Fantasia", "Animacion", "Comedia", "Drama"};
 	String[] categoriaDeCadaPelicula = new String[20];
 	boolean[] disponiblePelicula = new boolean[20];
+	int[] cantidadPorCategoria = {0,0,0,0,0};
 	
 	//Arreglo para los dias  de prestado para cada pelicula
 	int peliculasPrestados = 0;
 	int[] díasPrestamo = {1,5,15,30};
 	int[] idClientePrestador  = new int[20];
 	int[] idPeliculaPrestado  = new int[20];
-	int[] diaPrestadoPelicula = new int[20]; 
+	int[] diaPrestadoPelicula = new int[20];
+	int[] cantidadVecesSePresta = new int[20];
 }
