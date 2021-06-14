@@ -430,8 +430,78 @@ public class IPC1JunioPractica2{
 	
 	//Funcion ordenar peliculas respecto al id
 	private void ordenarLasPeliculas(){
-		
-		
+		int min;
+		boolean continuar = false;
+		System.out.println("\nOrdenando las peliculas conforme su Id... ");
+		//Usamos ordenamiento por seleccion
+        	for (int i = 0; i < nPeliculas; i++) {
+	            min = i;
+        	    for (int j = i + 1; j < nPeliculas; j++) {
+        	        //Buscar el elemento mas pequeño del arreglo
+        	        //String el1 = idPelicula[j]; //a
+        	        //String el2 = idPelicula[min]; //c
+        	        if (idPelicula[j]<idPelicula[min]/*el1.compareTo(el2) < 0*/) {
+        	            min = j;
+        	        }
+        	    }
+
+	            //Hacemos el intercambio en el Id
+        	    int auxiliarIdPelicula = idPelicula[i];
+        	    idPelicula[i] = idPelicula[min];
+        	    idPelicula[min] = auxiliarIdPelicula;
+        	    
+        	    //Hacemos el intercambio en el nombre
+        	    String auxiliarNombrePelicula = nombrePelicula[i];
+        	    nombrePelicula[i] = nombrePelicula[min];
+        	    nombrePelicula[min] = auxiliarNombrePelicula;
+        	    
+        	    //Hacemos el intercambio en el año
+        	    int auxiliarAñoPelicula = añoPelicula[i];
+        	    añoPelicula[i] = añoPelicula[min];
+        	    añoPelicula[min] = auxiliarAñoPelicula;
+        	    
+        	    //Hacemos el intercambio en la categoria
+        	    String auxiliarCategoriaPelicula = categoriaDeCadaPelicula[i];
+        	    categoriaDeCadaPelicula[i] = categoriaDeCadaPelicula[min];
+        	    categoriaDeCadaPelicula[min] = auxiliarCategoriaPelicula;
+        	    
+        	    //Hacemos el intercambio en la disponibilidad
+        	    boolean auxiliarDisponiblePelicula = disponiblePelicula[i];
+        	    disponiblePelicula[i] =disponiblePelicula[min];
+        	    disponiblePelicula[min] = auxiliarDisponiblePelicula;
+        	}
+        	
+		do{
+			System.out.print("\n¡Peliculas Ordenados respecto su Id!"
+					 + "\n1. Imprimir en orden ascendente."
+					 + "\n2. Imprimir en orden descendente."
+					 + "\nIngrese un opcion: ");
+			int opcion = entrada.nextInt();
+			switch(opcion){
+				case 1:
+					System.out.println("\n¡Orden ascendente!");
+					for(int i=0; i<nPeliculas; i++){
+						System.out.println("Id: "+idPelicula[i]+" --  nombre: " + nombrePelicula[i] +
+						" --  año: " +añoPelicula[i] + " --  categoria: "+categoriaDeCadaPelicula[i]+
+						" --  disponible: "+ disponiblePelicula[i]);
+					}
+					continuar = true;
+					break;
+				case 2:
+					System.out.println("\n¡Orden descendente!");
+					for(int i=(nPeliculas-1); i>=0; i--){
+						System.out.println("Id: "+idPelicula[i]+" --  nombre: " + nombrePelicula[i] +
+						" --  año: " +añoPelicula[i] + " --  categoria: "+categoriaDeCadaPelicula[i]+
+						" --  disponible: "+ disponiblePelicula[i]);
+					}
+					continuar = true;
+					break;
+				default:
+					System.out.println("¡Opción incorrecta, intentelo de nuevo!");
+					continuar = false;
+					break;
+			}
+		}while(continuar == false);	 
 	}
 	
 	//Funcion ingresar clientes nuevos
@@ -479,8 +549,7 @@ public class IPC1JunioPractica2{
 	
 	//Funcion para Reportes	
 	private void reportes(){
-		
-		
+			
 	}
 	
 	//Metodo principal
