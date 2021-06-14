@@ -298,7 +298,7 @@ public class IPC1JunioPractica2{
 				}
 				
 				if(encontrado == false){
-					System.out.println("Id no encontrada, vuelva a ingresar");
+					System.out.println("¡Id no encontrada, vuelva a ingresar!");
 				}
 				
 			}while(encontrado == false);
@@ -364,7 +364,67 @@ public class IPC1JunioPractica2{
 	
 	//Funcion Ingreso de Películas
 	private void ingresoDePeliculas(){
+		boolean continuar = false;
+		int idPeliculaIngresado;
 		
+		System.out.println("\nIngrese la información de la pelicula a continuación.");
+		do{
+			System.out.print("Ingrese el id de la pelicula: ");
+			idPeliculaIngresado = entrada.nextInt();
+			
+			for(int i=0; i<nPeliculas; i++){
+				if(idPelicula[i] == idPeliculaIngresado){
+					continuar = false;
+					System.out.println("¡El Id de la pelicula ya existe, ingrese uno nuevo!");
+					break;
+				} else {
+					continuar = true;
+				}
+			}
+			
+		}while(continuar == false);
+		
+		if(continuar){
+			idPelicula[nPeliculas] = idPeliculaIngresado;
+			System.out.print("Ingrese el nombre de la pelicula: ");
+			nombrePelicula[nPeliculas] = String.valueOf(entrada.next());
+			System.out.print("Ingrese el año de la pelicula: ");
+			añoPelicula[nPeliculas] = entrada.nextInt();
+			
+			do{
+				continuar = false;
+				System.out.print("Ingrese la categoria de la pelicula, "
+						+ "1. Ciencia ficción 2. Fantasia 3. Animacion 4. Comedia o 5. Drama: ");
+				int categoria = entrada.nextInt();
+				switch(categoria){
+					case 1:
+						categoriaDeCadaPelicula[nPeliculas] = categoriaPeliculas[0];
+						continuar = true;
+						break;
+					case 2:
+						categoriaDeCadaPelicula[nPeliculas] = categoriaPeliculas[0];
+						continuar = true;
+						break;
+					case 3:
+						categoriaDeCadaPelicula[nPeliculas] = categoriaPeliculas[0];
+						continuar = true;
+						break;
+					case 4:
+						categoriaDeCadaPelicula[nPeliculas] = categoriaPeliculas[0];
+						continuar = true;
+						break;
+					case 5:
+						categoriaDeCadaPelicula[nPeliculas] = categoriaPeliculas[0];
+						continuar = true;
+						break;
+					default:
+						System.out.println("Ingresó una categoria inexistente, intentelo de nuevo");
+				}
+			}while(continuar == false);
+			disponiblePelicula[nPeliculas] = true;
+			nPeliculas++;
+			System.out.println("\n¡Pelicula agregado exitosamente!");
+		}
 		
 	}
 	
@@ -376,13 +436,33 @@ public class IPC1JunioPractica2{
 	
 	//Funcion ingresar clientes nuevos
 	private void ingresarClientesNuevos(){
-		System.out.println("Ingrese su nombre: ");
-		nombreCliente[nClientes] = entrada.nextLine();
-		System.out.println("Ingrese su id: ");
-		idCliente[nClientes] = entrada.nextInt();
-		System.out.println("Ingrese su telefono: ");
-		telefonoCliente[nClientes] = entrada.nextInt();
+		boolean continuar = false;
+		int idClienteIngresado;
+		do{
+			System.out.print("Ingrese su id: ");
+			idClienteIngresado = entrada.nextInt();
+			
+			for(int i=0; i<nClientes; i++){
+				if(idCliente[i] == idClienteIngresado){
+					continuar = false;
+					System.out.println("¡El Id del cliente ya existe, ingrese uno nuevo!");
+					break;
+				} else {
+					continuar = true;
+				}
+			}
+			
+		}while(continuar == false);
 		
+		if(continuar){
+			idCliente[nClientes] = idClienteIngresado;
+			System.out.print("Ingrese su nombre: ");
+			nombreCliente[nClientes] = entrada.next();
+			System.out.print("Ingrese su telefono: ");
+			telefonoCliente[nClientes] = entrada.nextInt();
+			nClientes++;
+			System.out.println("\n¡Cliente agregado exitosamente!");
+		}
 	}
 	
 	//Funcion para mostrar clientes
